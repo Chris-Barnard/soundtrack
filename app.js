@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // include files for mongodb and mongoose
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://cbarnard:Nimbus1!@proximus.modulusmongo.net:27017/Eha7ruho');
+mongoose.connect('mongodb://serv-api:pl33zn0h4ck@proximus.modulusmongo.net:27017/Eha7ruho');
 require('./models/message');
 
 // routes
