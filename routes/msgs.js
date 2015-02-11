@@ -5,6 +5,21 @@ var router = express.Router()
 var mongoose = require('mongoose')
 var Message = mongoose.model('Message')
 
+/* Functions for Parameter Parsing */
+/***********************************/
+/* These are executed before the following routes */
+/* and passed on via the next callback functions*/
+
+/* Define PARAM :msg */
+router.param('msg', function (req, res, next, id) {
+  /* Pull relevant message from db and save as req.message */
+  Message.findById(id, function (err, message) {
+    if (err) { return next(err) };
+    if (!message) { return next(new Error("Cannot find " + id) ) };
+    req.message = message
+    return next()
+  })
+})
 
 /* Functions for GET Requests */
 /******************************/
@@ -18,19 +33,7 @@ router.get('/', function (req, res, next) {
 })
 
 /* GET /msgs/:id - Return requested message matching on Id */
-/* First define param :msg */
-router.param('msg', function (req, res, next, id) {
-  var query = Message.findById(id)
-
-  /* Pull relevant message from db and save as req.message */
-  query.exec(function (err, message) {
-    if (err) { return next(err) };
-    if (!message) { return next(new Error("Cannot find " + id) ) };
-    req.message = message
-    return next()
-  })
-})
-/* Next pass on req.message as a JSON response */
+/* First routed through param function above which setups up req.message */
 router.get('/:msg', function (req, res, next) {
   res.json(req.message)
 })
@@ -48,5 +51,36 @@ router.post('/', function (req, res, next) {
   })
 })
 
+/* Functions for PUT Requests */
+/******************************/
+
+/* PUT /msgs/:msg - Update message at ID with the attached message */
+/* First routed through param function above which setups up req.message */
+router.put('/:msg', function (req, res, next) {
+  Message.findByIdAndUpdate(req.message.id, req.body, function (err, message) {
+    if (err) { return next(err) };
+    if (!message) { 
+      return next(new Error("Could not find message to update at "
+        + req.message.id))
+    };
+    res.json(message)
+  })
+})
+
+/* Functions for DELETE Requests */
+/*********************************/
+
+/* DELETE /msgs/:msg - Delete message at ID */
+/* First routed through param function above which setups up req.message */
+router.delete('/:msg', function (req, res, next) {
+  Message.findByIdAndRemove(req.message.id, function (err, message) {
+    if (err) { return next(err) };
+    if (!message) {
+      return next(new Error('Could not find message to delete at '
+        + req.message.id))
+    };
+    res.json(message)
+  })
+})
 
 module.exports = router
