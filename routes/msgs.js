@@ -8,7 +8,7 @@ var Message = mongoose.model('Message')
 /* Functions for Parameter Parsing */
 /***********************************/
 /* These are executed before the following routes */
-/* and passed on via the next callback functions*/
+/* and passed on via the next callback function */
 
 /* Define PARAM :msg */
 router.param('msg', function (req, res, next, id) {
