@@ -10,8 +10,8 @@ Soundtrack to Your Life project
 | Request | Route | Action |
 | :------ | :---- | :----- |
 | GET | /msgs | Returns all messages in collection |
-| GET | /msgs/54db8a81d0df9128419109e1 | Returns message specified by id |
+| GET | /msgs/54dbbcb6ceb12b084322be1f | Returns message specified by id |
 | POST | /msgs | Adds a new message to the collection |
-| PUT | /msgs/54db8a81d0df9128419109e1 | Updates the message specified by id |
-| DELETE | /msgs/54db8a81d0df9128419109e1 | Deletes the message specified by id |
+| PUT | /msgs/54dbbcb6ceb12b084322be1f | Updates the message specified by id |
+| DELETE | /msgs/54dbbcb6ceb12b084322be1f | Deletes the message specified by id |
 
