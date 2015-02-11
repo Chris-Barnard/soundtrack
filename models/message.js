@@ -4,8 +4,8 @@ var MessageSchema = new mongoose.Schema(
   { user : { name : String
            , email : String
            }
-  , videoPath : { type : String, default : null }
-  , audioPath : { type : String, default : null }
+  , videoUrl : { type : String, default : null }
+  , audioUrl : { type : String, default : null }
   , message : { type : String, default : null }
   , comments : [{ body : String
                 , date : Date
