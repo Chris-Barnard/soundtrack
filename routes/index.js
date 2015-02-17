@@ -9,12 +9,15 @@ var users = require('./users.js')
 router.post('/login', auth.login)
 router.post('/signup', auth.signup)
 
-// routes that can only be accessed by authenticated users
+// message routes that can only be accessed by authenticated users
 router.get('/api/v1/msgs', msgs.getAll)
 router.get('/api/v1/msgs/:id', msgs.getOne)
 router.post('/api/v1/msgs', msgs.create)
 router.put('/api/v1/msgs/:id', msgs.update)
 router.delete('/api/v1/msgs/:id', msgs.delete)
+
+// user routes that can be accessed by authenticated users
+router.get('/api/v1/users/self', users.getOne)
 
 // routes that can only be accessed by authenticated & authorized user
 // Authentication criteria user.role = 'admin'

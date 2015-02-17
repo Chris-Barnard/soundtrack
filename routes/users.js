@@ -11,8 +11,7 @@ var users = {
 		})
 	}
   , getOne : function (req, res, next) {
-    var id = req.params.id
-
+    var id = req.params.id || req.self
     User.findById(id, function (err, user) {
       if (err) { return next(err) };
       if (!user) { return next(new Error('Cannot find user: ' + id)) };
