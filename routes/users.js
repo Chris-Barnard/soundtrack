@@ -25,7 +25,6 @@ var users = {
     pass.hash(req.body.password, function (err, salt, hash) {
       newUser.salt = salt
       newUser.hash = hash
-      console.log(newUser)
       newUser.save(function (err, user) {
         if (err) { return next(err) };
         res.json(user)
