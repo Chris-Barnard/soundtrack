@@ -4,11 +4,11 @@ var UserSchema = mongoose.Schema(
   { username : String
   ,	email : String
   , name : { first : String
-  			   , last : String
+  		     , last : String
            }
+  , role : { type : String, default : "user" }
   , salt : String
   , hash : String
-  , role : String
   }
 )
 

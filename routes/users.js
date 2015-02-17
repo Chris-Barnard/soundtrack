@@ -20,14 +20,19 @@ var users = {
     })
   }
   , create : function (req, res, next) {
-    var newUser = new User(req.body)
-
-    pass.hash(req.body.password, function (err, salt, hash) {
-      newUser.salt = salt
-      newUser.hash = hash
-      newUser.save(function (err, user) {
-        if (err) { return next(err) };
-        res.json(user)
+    // here is where the validate user is called
+    users.validateNewUser(req.body, function (err, validUser) {
+      // and this is the function that is called when you call next
+      var newUser = new User(validUser)
+      
+      if (err) { next(err) };
+      pass.hash(validUser.password, function (err, salt, hash) {
+        newUser.salt = salt
+        newUser.hash = hash
+        newUser.save(function (err, user) {
+          if (err) { return next(err) };
+          res.json(user)
+        })
       })
     })
   }
@@ -49,6 +54,13 @@ var users = {
       if (!user) { return next(new Error('Cannot find user: ' + id)) };
       res.json(true)
     })
+  }
+  , validateNewUser : function (newUser, next) {
+    /* Here is where your code for assignment #1 will go */
+
+    // right now this line is included so that it just goes on to the next function
+    // with whatever object was passed in
+    return next(false, newUser)
   }
 }
 
