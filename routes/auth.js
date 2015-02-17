@@ -1,4 +1,5 @@
 var jwt = require('jsonwebtoken')
+var pass = require('pwd')
 var mongoose = require('mongoose')
 var User = mongoose.model('User')
 
@@ -25,18 +26,27 @@ var auth = {
     })
   }
   , validate : function (username, password, next) {
-    User.findOne( { username : username
-                  , password : password
-                  }
+    // find user in db with username
+    User.findOne( { username : username }
       , function (err, user) {
         if (err) { return next(err) };
-        next(0, user)
+        // now use password and user's salt to generate their hash
+        pass.hash(password, user.salt, function (err, hash) {
+          // if the stored hash == the generated hash we have a match
+          if (user.hash == hash) {
+            next(false, user)
+          } else {
+            var err = new Error('Invalid credentials')
+            err.status = 401
+            return next(err)
+          };
+        })
       })
   }
   , validateUser : function (username, next) {
     User.findOne( { username : username }, function (err, user) {
       if (err) { return next(err) };
-      return next(0, user)
+      return next(false, user)
     })
   }
   , signup : function (req, res, next) {
@@ -57,8 +67,8 @@ function genToken (user) {
   var token = jwt.sign( { exp : expires
                         , iss : 'http://localhost'
                         , aud : 'soundtrack'
-                        , sub : user.username }, 'pandaistheperfectpuppybutilovelucytoo')
-  
+                        , sub : user.username
+                        }, 'pandaistheperfectpuppybutilovelucytoo')
   return { token : token
          , expires : expires
          , user : user

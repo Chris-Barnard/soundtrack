@@ -1,3 +1,4 @@
+var pass = require('pwd')
 var mongoose = require('mongoose')
 var User = mongoose.model('User')
 
@@ -21,9 +22,14 @@ var users = {
   , create : function (req, res, next) {
     var newUser = new User(req.body)
 
-    newUser.save(function (err, user) {
-      if (err) { return next(err) };
-      res.json(user)
+    pass.hash(req.body.password, function (err, salt, hash) {
+      newUser.salt = salt
+      newUser.hash = hash
+      console.log(newUser)
+      newUser.save(function (err, user) {
+        if (err) { return next(err) };
+        res.json(user)
+      })
     })
   }
   , update : function (req, res, next) {
