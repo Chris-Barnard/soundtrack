@@ -11,16 +11,17 @@ router.post('/signup', auth.signup)
 
 // routes that can only be accessed by authenticated users
 router.get('/api/v1/msgs', msgs.getAll)
-router.get('/api/v1/msg/:id', msgs.getOne)
-router.post('/api/v1/msg', msgs.create)
-router.put('/api/v1/msg/:id', msgs.update)
-router.delete('/api/v1/msg/:id', msgs.delete)
+router.get('/api/v1/msgs/:id', msgs.getOne)
+router.post('/api/v1/msgs', msgs.create)
+router.put('/api/v1/msgs/:id', msgs.update)
+router.delete('/api/v1/msgs/:id', msgs.delete)
 
-// routes that can only be accessed by authenticated & authorized users
+// routes that can only be accessed by authenticated & authorized user
+// Authentication criteria user.role = 'admin'
 router.get('/api/v1/admin/users', users.getAll)
-router.get('/api/v1/admin/user/:id', users.getOne)
-router.post('/api/v1/admin/user', users.create)
-router.put('/api/v1/admin/user/:id', users.update)
-router.delete('/api/v1/admin/user/:id', users.delete)
+router.get('/api/v1/admin/users/:id', users.getOne)
+router.post('/api/v1/admin/users', users.create)
+router.put('/api/v1/admin/users/:id', users.update)
+router.delete('/api/v1/admin/users/:id', users.delete)
 
 module.exports = router;
