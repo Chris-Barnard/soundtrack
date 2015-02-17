@@ -1,10 +1,13 @@
 var mongoose = require('mongoose')
 
 var UserSchema = mongoose.Schema(
-  { email : String
-  , name : String
+  { username : String
+  ,	email : String
+  , name : { first : String
+  			   , last : String
+           }
   , password : String
-  , token : String 
+  , role : String
   }
 )
 
