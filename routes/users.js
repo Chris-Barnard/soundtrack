@@ -59,11 +59,9 @@ var users = {
     var id = req.params.id || req.self
     
     User.findById(id, function (err, user) {
-      var followsIdList = user.follows
-
       if (err) { return next(err) };
       if (!user) { return next(new Error('Cannot find user: ' + id)) };
-      makeUserList(followsIdList, [], function (userList) {
+      makeUserList(user.follows, [], function (userList) {
         res.json(userList)
       })
     })
