@@ -9,6 +9,12 @@ var UserSchema = mongoose.Schema(
   , role : { type : String, default : "user" }
   , salt : String
   , hash : String
+  , counts : { follows : Number 
+             , followers : Number
+             , posts : Number
+             }
+  , follows : Array
+  , followers : Array
   }
 )
 

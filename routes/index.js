@@ -18,6 +18,10 @@ router.delete('/api/v1/msgs/:id', msgs.delete)
 
 // user routes that can be accessed by authenticated users
 router.get('/api/v1/users/self', users.getOne)
+router.get('/api/v1/users/:id', users.getOne)
+router.get('/api/v1/users/self/follows', users.getOneFollows)
+router.get('/api/v1/users/:id/follows', users.getOneFollows)
+
 
 // routes that can only be accessed by authenticated & authorized user
 // Authentication criteria user.role = 'admin'

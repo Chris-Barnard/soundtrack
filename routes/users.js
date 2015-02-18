@@ -54,6 +54,20 @@ var users = {
       res.json(true)
     })
   }
+  // function to aggregate all the users followed by a specific user
+  , getOneFollows : function (req, res, next) {
+    var id = req.params.id || req.self
+    
+    User.findById(id, function (err, user) {
+      var followsIdList = user.follows
+
+      if (err) { return next(err) };
+      if (!user) { return next(new Error('Cannot find user: ' + id)) };
+      makeUserList(followsIdList, [], function (userList) {
+        res.json(userList)
+      })
+    })
+  }
   , validateNewUser : function (newUser, next) {
     /* Here is where your code for assignment #1 will go */
 
@@ -61,6 +75,31 @@ var users = {
     // with whatever object was passed in
     return next(false, newUser)
   }
+}
+
+// private methods
+
+
+// makeUserList Recursive Function
+function makeUserList (userIdList, userList, next) {
+  // if we are at the end of userIdList return our userList
+  if (!userIdList.length) { return next(userList) };
+  // Grab last userId
+  var userId = userIdList.pop()
+  // find the associated user in DB
+  User.findById(userId, function (err, user) {
+    var userObj = {}
+    // create an object that has the data we want to share
+    userObj.username = user.username
+    userObj.id = user.id
+    userObj.fullName = user.name.first + ' ' + user.name.last
+    userObj.counts = user.counts
+    // and push it onto userList array
+    userList.push(userObj)
+    console.log(userObj)
+    // recursively call this function to process the next element
+    makeUserList(userIdList, userList, next)
+  })
 }
 
 module.exports = users
