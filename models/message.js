@@ -4,9 +4,10 @@ var MessageSchema = new mongoose.Schema(
   // user who message belongs to
   { user : { name : String
            , email : String
+           , userId : ObjectId
            }
   // sharing controls who can see the message
-  // publicShare messages can be seen by anyone who visits you're account
+  // publicShare messages can be seen by anyone who follows your account
   // privateShare messages are only visible by a specified list of accounts
   , sharing : { publicShare : { type: Boolean, default : true } 
               , privateShareList : [ { user : { name : String
