@@ -53,9 +53,21 @@ var auth = {
     // function to create a new user 
     // needs implementation
     // return a status 501 - Not Implemented
-    var err = new Error('Not Implemented')
+    /*var err = new Error('Not Implemented')
     err.status = 501
-    return next(err)
+    return next(err)*/
+    var newUser = new User( { "username" : "testuser"
+                            , "email" : "test@email.com"
+                            , "role" : "admin"
+                          })
+    pass.hash("1234", function (err, salt, hash) {
+      newUser.salt = salt
+      newUser.hash = hash
+      newUser.save(function (err, user) {
+        if (err) { return next(err) };
+        res.json(user)
+      })
+    })
   }
 }
 

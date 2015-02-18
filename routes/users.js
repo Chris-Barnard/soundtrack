@@ -23,8 +23,8 @@ var users = {
     users.validateNewUser(req.body, function (err, validUser) {
       // and this is the function that is called when you call next
       var newUser = new User(validUser)
-      
       if (err) { next(err) };
+      
       pass.hash(validUser.password, function (err, salt, hash) {
         newUser.salt = salt
         newUser.hash = hash
@@ -48,7 +48,7 @@ var users = {
   , delete : function (req, res, next) {
     var id = req.params.id
 
-    User.findByIdAndDelete(id, function (err, user) {
+    User.findByIdAndRemove(id, function (err, user) {
       if (err) { return next(err) };
       if (!user) { return next(new Error('Cannot find user: ' + id)) };
       res.json(true)
@@ -86,14 +86,19 @@ function makeUserList (userIdList, userList, next) {
   if (!userIdList.length) { return next(userList) };
   // Grab last userId
   var userId = userIdList.pop()
+  console.log(userId)
   // find the associated user in DB
   User.findById(userId, function (err, user) {
+    if (err) { return next(err) };
+    if (!user) { return next(new Error('Cannot find user: ' + userId))};
     var userObj = {}
     // create an object that has the data we want to share
     userObj.username = user.username
     userObj.id = user.id
     userObj.fullName = user.name.first + ' ' + user.name.last
-    userObj.counts = user.counts
+    userObj.counts = {}
+    userObj.counts.follows = user.follows.length
+    userObj.counts.followers = user.followers.length
     // and push it onto userList array
     userList.push(userObj)
     console.log(userObj)
