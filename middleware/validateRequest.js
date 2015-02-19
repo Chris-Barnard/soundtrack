@@ -35,7 +35,8 @@ module.exports = function(req, res, next) {
             return next(err)
         };
 
-
+        // save the current user id into req.userId
+        req.userId = dbUser.id
 
         // is the request to the admin section and does user have admin rights?
         // or is request not to admin but still to the correct api path

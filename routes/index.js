@@ -16,11 +16,19 @@ router.post('/api/v1/msgs', msgs.create)
 router.put('/api/v1/msgs/:id', msgs.update)
 router.delete('/api/v1/msgs/:id', msgs.delete)
 
+
 // user routes that can be accessed by authenticated users
+// users
 router.get('/api/v1/users/self', users.getOne)
 router.get('/api/v1/users/:id', users.getOne)
+router.get('/api/v1/users/self/msgs', msgs.getRecentForUser)
+router.get('/api/v1/users/:id/msgs', msgs.getRecentForUser)
+router.get('/api/v1/users/self/feed', msgs.getFeed)
+
+// relationships
 router.get('/api/v1/users/self/follows', users.getOneFollows)
 router.get('/api/v1/users/:id/follows', users.getOneFollows)
+router.post('/api/v1/users/self/follows', users.adjFollows)
 
 
 // routes that can only be accessed by authenticated & authorized user

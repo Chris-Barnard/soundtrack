@@ -73,6 +73,71 @@ var users = {
     // with whatever object was passed in
     return next(false, newUser)
   }
+  , adjFollows : function (req, res, next) {
+    var action = req.body.action
+    if (action === 'ADD') { return users.addFollows(req, res, next) };
+    if (action === 'DROP') { return users.dropFollows(req, res, next) };
+    var err = new Error('Please specify a valid action')
+    err.status = 400
+    next(err)
+  }
+  // function to follow users
+  , addFollows : function (req, res, next) {
+    var id = req.params.id || req.self
+    var followName = req.body.followName
+
+    User.findById(id, function (err, user) {
+      if (err) { return next(err) };
+      if (!user) { return next(new Error('Cannot find user: ' + id)) };
+      // find the user we want to follow
+      User.findOne({ username : followName }, function (err, userToFollow) {
+        if (err) { return next(err) };
+        if (!userToFollow) { return next(new Error('User not found ' + followName)) };
+        // add userToFollow's ObjectId to the user's follows array
+        user.follows.push(mongoose.Types.ObjectId(userToFollow.id))
+        // now write that user back to the db
+        user.save(function (err, userUpdated) {
+          if (err) { return next(err) };
+          if (!userUpdated) { return next(new Error('Error saving updated user')) };
+          makeUserList(userUpdated.follows, [], function (userListUpdated) {
+            res.json(userListUpdated)
+          })
+        })
+      })
+    })
+  }
+  // function to stop following a user
+  , dropFollows : function (req, res, next) {
+    var id = req.params.id || req.self
+    var followName = req.body.followName
+
+    User.findById(id, function (err, user) {
+      if (err) { return next(err) };
+      if (!user) { return next(new Error('Cannot find user: ' + id)) };
+      // find the user we want to stop following
+      User.findOne({ username : followName }, function (err, userToUnFollow) {
+        if (err) { return next(err) };
+        if (!userToUnFollow) { return next(new Error('User not found ' + followName)) };
+        // remove userToFollow's ObjectId to the user's follows array
+        indexOfUser = user.follows.indexOf(
+            mongoose.Types.ObjectId(userToUnFollow.id))
+        if (indexOfUser < 0) {
+          var err = new Error('User to remove not found')
+          err.status = 400
+          next(err)
+        };
+        user.follows.splice(indexOfUser, 1)
+        // now write that user back to the db
+        user.save(function (err, userUpdated) {
+          if (err) { return next(err) };
+          if (!userUpdated) { return next(new Error('Error saving updated user')) };
+          makeUserList(userUpdated.follows, [], function (userListUpdated) {
+            res.json(userListUpdated)
+          })
+        })
+      })
+    })
+  }
 }
 
 // private methods
@@ -84,7 +149,6 @@ function makeUserList (userIdList, userList, next) {
   if (!userIdList.length) { return next(userList) };
   // Grab last userId
   var userId = userIdList.pop()
-  console.log(userId)
   // find the associated user in DB
   User.findById(userId, function (err, user) {
     if (err) { return next(err) };
@@ -99,7 +163,6 @@ function makeUserList (userIdList, userList, next) {
     userObj.counts.followers = user.followers.length
     // and push it onto userList array
     userList.push(userObj)
-    console.log(userObj)
     // recursively call this function to process the next element
     makeUserList(userIdList, userList, next)
   })

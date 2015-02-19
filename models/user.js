@@ -10,7 +10,7 @@ var UserSchema = mongoose.Schema(
   , salt : String
   , hash : String
   , follows : Array
-  , followers : Array
+  , followers : [{ type: mongoose.Schema.Types.ObjectId, ref : 'User' }]
   }
 )
 

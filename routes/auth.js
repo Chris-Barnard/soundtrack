@@ -56,13 +56,11 @@ var auth = {
     /*var err = new Error('Not Implemented')
     err.status = 501
     return next(err)*/
-    var newUser = new User( { "username" : "testuser"
-                            , "email" : "test@email.com"
-                            , "role" : "admin"
-                          })
-    pass.hash("1234", function (err, salt, hash) {
+    var newUser = new User(req.body)
+    pass.hash(req.body.password, function (err, salt, hash) {
       newUser.salt = salt
       newUser.hash = hash
+      newUser.role = 'user'
       newUser.save(function (err, user) {
         if (err) { return next(err) };
         res.json(user)
