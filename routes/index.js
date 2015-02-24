@@ -4,6 +4,11 @@ var router = express.Router();
 var auth = require('./auth.js')
 var msgs = require('./msgs.js')
 var users = require('./users.js')
+var webapp = require('./webapp.js')
+
+/*************************************
+ * API Access Points
+ *************************************/
 
 // routes that anyone can access
 router.post('/login', auth.login)
@@ -25,6 +30,7 @@ router.get('/api/v1/users/self/msgs', msgs.getRecentForUser)
 router.get('/api/v1/users/:id/msgs', msgs.getRecentForUser)
 router.get('/api/v1/users/self/feed', msgs.getFeed)
 
+
 // relationships
 router.get('/api/v1/users/self/follows', users.getOneFollows)
 router.get('/api/v1/users/:id/follows', users.getOneFollows)
@@ -38,5 +44,10 @@ router.get('/api/v1/admin/users/:id', users.getOne)
 router.post('/api/v1/admin/users', users.create)
 router.put('/api/v1/admin/users/:id', users.update)
 router.delete('/api/v1/admin/users/:id', users.delete)
+
+/*************************************
+ * WebApp Rendering
+ *************************************/
+router.get('/', webapp.indexPage)
 
 module.exports = router;

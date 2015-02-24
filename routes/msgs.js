@@ -2,6 +2,16 @@ var mongoose = require('mongoose')
 var Message = mongoose.model('Message')
 var User = mongoose.model('User')
 
+/*********************************************************************/
+/* Note that right now messages are stored once in the db            */
+/*  and on each read request (msgs.getFeed) it must go out and grab  */
+/*  all the messages from the server that need to populate the feed  */
+/*  The concern is that with sharding, it could be going to numerous */
+/*  different shards to grab the messages to put together the feed   */
+/*********************************************************************/
+/* http://blog.mongodb.org/post/65612078649/schema-design-for-social-inboxes-in-mongodb */
+/* I am basically using the fan out on read method */
+
 var msgs = {
   getAll : function (req, res, next) {
     Message.find(function (err, messages) {
@@ -56,7 +66,7 @@ var msgs = {
     newMsg.save(function (err, message) {
       if (err) { return next(err) };
       res.json(message)
-    })
+    }) 
   }
   , update : function (req, res, next) {
     var updateMsg = req.body
