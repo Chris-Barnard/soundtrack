@@ -40,3 +40,7 @@ Thumbs.db
 # node_modules #
 ################
 node_modules
+
+# assets #
+##########
+public/assets/
