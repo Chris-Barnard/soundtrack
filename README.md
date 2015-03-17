@@ -5,7 +5,11 @@ Soundtrack to Your Life project
 
 You will need to install bower to install or update 3rd party assets.
 
+<<<<<<< HEAD
 ```shell
+=======
+```
+>>>>>>> 18d3fd761ffdeede728784566dc3e1c5b8e42890
 npm install -g bower
 ```
 
