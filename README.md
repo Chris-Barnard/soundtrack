@@ -1,6 +1,14 @@
 # soundtrack
 Soundtrack to Your Life project
 
+### Development Environment Dependencies
+
+You will need to install bower to install or update 3rd party assets.
+
+```shell
+npm install -g bower
+```
+
 ### Need data validation on user add
 Right now when there is a post request to /api/v1/admin/users a new user is created regardless of the content (body) of the request.
 In the /routes/users.js file I have created a new function for you to write
