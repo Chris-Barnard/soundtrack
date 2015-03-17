@@ -1,11 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html data-ng-app="app" ng-strict-di>
   <head>
+<<<<<<< HEAD
     <title>{{title}}</title>
+=======
+    <title data-ng-bind="title"></title>
+>>>>>>> 84950cc4df8685e01db22aadfaf43a03281455bd
     {{{ css 'application.css' }}}
     {{{ js 'application.js' }}}
   </head>
   <body>
-    {{{body}}}
+    <div data-ng-view></div>
   </body>
 </html>
