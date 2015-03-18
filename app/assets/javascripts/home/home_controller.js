@@ -11,6 +11,7 @@
     var vm = this;
 
     vm.activeUser = {};
+    vm.isLoggedIn = isLoggedIn;
     vm.title = 'Soundtrack For Your Life';
 
     activate();
@@ -33,7 +34,10 @@
         }, function (reason) {
           $log.log('Could not log in: ' + reason.message);
         });
-        
+    }
+
+    function isLoggedIn () {
+      if (vm.activeUser) { return true } else { return false }
     }
   }
 
