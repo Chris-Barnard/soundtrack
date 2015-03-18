@@ -30,6 +30,11 @@ var auth = {
     User.findOne( { username : username }
       , function (err, user) {
         if (err) { return next(err) };
+        if (!user) {
+          var err = new Error('Invalid credentials')
+          err.status = 401
+          return next(err)
+        }
         // now use password and user's salt to generate their hash
         pass.hash(password, user.salt, function (err, hash) {
           // if the stored hash == the generated hash we have a match
