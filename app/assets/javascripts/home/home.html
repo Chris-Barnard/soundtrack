@@ -1,2 +1,17 @@
 <h1>{{ vm.title }}</h1>
-<p>Welcome to {{ vm.title }}</p>
+<p>Welcome {{ vm.activeUser.username }}</p>
+<div ng-repeat="item in vm.activeUser.feed" class="container">
+	<blockquote class="row">
+		<p>
+			<span>
+				{{ item.sender.username }}
+			</span>
+			<span> >> </span>
+			<span>
+				{{ item.body.caption }}
+			</span>
+		</p>
+	</blockquote>
+</div>
+
+

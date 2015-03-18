@@ -38,7 +38,7 @@ var msgs = {
       if (err) { return next(err) };
       if (!user) { return next(new Error('Cannot find user: ' + id)) };
       // next find every message that has a sender field in the user.follows array
-      var query = Message.find({ sender : { $in : user.follows } }).sort({ dateReceived : -1 })
+      var query = Message.find({ "sender.id" : { $in : user.follows } }).sort({ dateReceived : -1 })
       query.exec(function (err, messages) {
         if (err) { return next(err) };
         // return the messages found
@@ -61,12 +61,19 @@ var msgs = {
     var newMsg = new Message(req.body)
 
     // set the sender to the logged in user making the request
-    newMsg.sender = req.userId
-    // save the message to the DB
-    newMsg.save(function (err, message) {
-      if (err) { return next(err) };
-      res.json(message)
-    }) 
+    User.findById(req.userId, function (err, user) {
+      newMsg.sender.id = user.id;
+      newMsg.sender.username = user.username;
+      newMsg.sender.iconPath = null;
+      newMsg.body.caption = req.body.caption;
+
+      console.log(newMsg);
+      // save the message to the DB
+      newMsg.save(function (err, message) {
+        if (err) { return next(err) };
+        res.json(message)
+      }) 
+    })
   }
   , update : function (req, res, next) {
     var updateMsg = req.body
