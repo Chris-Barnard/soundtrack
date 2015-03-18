@@ -15,8 +15,6 @@
     vm.getLoginError = getLoginError;
     vm.handleLogin = handleLogin;
     vm.handleLogout = handleLogout;
-    vm.inputUserName = '';
-    vm.inputPassword = '';
     vm.isLoggedIn = isLoggedIn;
     vm.title = 'Soundtrack For Your Life';
 
@@ -25,8 +23,7 @@
     function activate() {
     	// handleLogin();
       vm.activeUser = null;
-      vm.inputUserName = '';
-      vm.inputPassword = '';
+      loginError = false;
     }
 
     function getLoginError () {
@@ -45,7 +42,7 @@
               $log.log('Could not load feed: ' + reason.message);
             });
         }, function (reason) {
-          logInError = true;
+          loginError = true;
         });
     }
     function handleLogout () {
