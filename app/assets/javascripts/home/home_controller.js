@@ -33,8 +33,8 @@
       return loginError;
     }
 
-    function handleLogin () {
-      DataService.login(vm.inputUserName, vm.inputPassword)
+    function handleLogin (username, pass) {
+      DataService.login(username, pass)
         .then(function (data) {
           vm.activeUser = data;
           DataService.getFeed()

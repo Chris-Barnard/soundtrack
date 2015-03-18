@@ -1,0 +1,64 @@
+<!-- log in needed nav bar -->
+<div ng-hide="vm.isLoggedIn()">
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#soundtrack-navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">{{ vm.title }}</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="soundtrack-navbar-collapse">
+				<form class="navbar-form pull-right">
+					<div class="form-group">
+						<input type="text" ng-model="nav.inputUserName" placeholder="username" class="form-control">
+					</div>
+					<div class="form-group">
+						<input type="password" ng-model="nav.inputPassword" placeholder="password" class="form-control">
+					</div>
+					<button type="submit" class="btn btn-warning" ng-click="vm.handleLogin(nav.inputUserName, nav.inputPassword)">Login</button>
+				</form>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	<div ng-show="vm.getLoginError()" class="alert alert-danger" role="alert">
+		<strong>Invalid</strong> username or password.  Please try again.
+	</div>
+</div>
+<!-- end of log in needed nav bar -->
+
+<!-- user logged in nav bar -->
+<div ng-show="vm.isLoggedIn()">
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#soundtrack-navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">{{ vm.title }}</a>
+			</div>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="soundtrack-navbar-collapse">
+				<ul class="nav navbar-nav navbar-right">
+					<li class="dropdown">
+						<a href="" class="dropdown-toggle" data-toggle="dropdown" role="button">{{ vm.activeUser.username }} <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="">View Follows</a></li>
+							<li><a href="" ng-click="vm.handleLogout();nav.logout();">Logout</a></li>							
+						</ul>
+					</li>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+</div>
+<!-- end of user logged in nav bar -->
