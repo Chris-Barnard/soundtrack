@@ -9,19 +9,32 @@
 
   function HomeController(DataService, $log) {
     var vm = this;
+    var loginError = false;
 
-    vm.activeUser = {};
+    vm.activeUser = null;
+    vm.getLoginError = getLoginError;
+    vm.handleLogin = handleLogin;
+    vm.handleLogout = handleLogout;
+    vm.inputUserName = '';
+    vm.inputPassword = '';
     vm.isLoggedIn = isLoggedIn;
     vm.title = 'Soundtrack For Your Life';
 
     activate();
 
     function activate() {
-    	handleLogin();
+    	// handleLogin();
+      vm.activeUser = null;
+      vm.inputUserName = '';
+      vm.inputPassword = '';
+    }
+
+    function getLoginError () {
+      return loginError;
     }
 
     function handleLogin () {
-      DataService.login('testuser99', '123')
+      DataService.login(vm.inputUserName, vm.inputPassword)
         .then(function (data) {
           vm.activeUser = data;
           DataService.getFeed()
@@ -32,8 +45,11 @@
               $log.log('Could not load feed: ' + reason.message);
             });
         }, function (reason) {
-          $log.log('Could not log in: ' + reason.message);
+          logInError = true;
         });
+    }
+    function handleLogout () {
+      activate();
     }
 
     function isLoggedIn () {
