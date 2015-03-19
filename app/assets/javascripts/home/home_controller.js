@@ -5,52 +5,39 @@
     .module('app.home')
     .controller('HomeController', HomeController);
 
-  HomeController.$inject = ['DataService', '$log'];
+  HomeController.$inject = ['DataService', 'UserAuth','$log'];
 
-  function HomeController(DataService, $log) {
+  function HomeController(DataService, UserAuth, $log) {
     var vm = this;
-    var loginError = false;
 
     vm.activeUser = null;
-    vm.getLoginError = getLoginError;
+    vm.getFeed = getFeed;
+    vm.getLoginError = UserAuth.getLoginError;
     vm.handleLogin = handleLogin;
-    vm.handleLogout = handleLogout;
-    vm.isLoggedIn = isLoggedIn;
+    vm.handleLogout = UserAuth.logout;
+    vm.isLoggedIn = UserAuth.isLoggedIn;
     vm.title = 'Soundtrack For Your Life';
 
     activate();
 
     function activate() {
-    	// handleLogin();
-      vm.activeUser = null;
-      loginError = false;
+      vm.activeUser = UserAuth.getActiveUser();
+
+      if (vm.activeUser) { getFeed() }
     }
 
-    function getLoginError () {
-      return loginError;
+    function getFeed () {
+      return DataService.getFeed().then(function (feed) {
+        vm.activeUser.feed = feed;
+        return vm.activeUser.feed;
+      });
     }
 
-    function handleLogin (username, pass) {
-      DataService.login(username, pass)
-        .then(function (data) {
-          vm.activeUser = data;
-          DataService.getFeed()
-            .then(function (data) {
-              vm.activeUser.feed = data;
-              $log.log(data);
-            }, function (reason) {
-              $log.log('Could not load feed: ' + reason.message);
-            });
-        }, function (reason) {
-          loginError = true;
-        });
-    }
-    function handleLogout () {
-      activate();
-    }
-
-    function isLoggedIn () {
-      if (vm.activeUser) { return true } else { return false }
+    function handleLogin (username, password) {
+      return UserAuth.login(username, password).then(function (data) {
+        vm.activeUser = data;
+        getFeed();
+      });
     }
   }
 

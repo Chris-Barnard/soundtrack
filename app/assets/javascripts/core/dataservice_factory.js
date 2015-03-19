@@ -13,6 +13,7 @@
     var key = ''; /* username that must match access token */
     var service = {
       login : login
+    , logout : logout
     , getFeed : getFeed
     };
 
@@ -37,6 +38,11 @@
         });
 
       return deferred.promise;
+    }
+
+    function logout () {
+      token = {};
+      key = '';
     }
 
     function getFeed () {
