@@ -48,6 +48,7 @@ router.delete('/api/v1/admin/users/:id', users.delete)
 /*************************************
  * WebApp Rendering
  *************************************/
+router.get('/app/*', webapp.indexPage)
 router.get('/*', webapp.indexPage)
 
 module.exports = router;
